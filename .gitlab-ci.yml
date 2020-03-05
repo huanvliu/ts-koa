@@ -1,0 +1,22 @@
+stages:
+    - image-build
+    - image-commit
+
+image-build:
+    only:
+        - tags
+    stage: image-build
+    script:
+        # - cd client
+        # - git pull origin master
+        # - npm run build-pro
+        # - cd ../
+        - npm i
+        - sudo docker build -t fiskzeroun.faceunity.com:5000/${CI_PROJECT_NAME}:${CI_BUILD_TAG} . #DOCKER_REGISTRY替换为docker仓库地址或设置pipline的env,gitlab9.0以上版本CI_BUILD_TAG替换为CI_COMMIT_SHA
+
+image-commit:
+    only:
+        - tags
+    stage: image-commit
+    script:
+        - sudo docker push fiskzeroun.faceunity.com:5000/${CI_PROJECT_NAME}:${CI_BUILD_TAG}
